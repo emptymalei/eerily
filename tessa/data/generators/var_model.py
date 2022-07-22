@@ -1,8 +1,8 @@
-
 class VARModel:
     """
     A $k$-variate VAR(p) model of order-$p$.
     """
+
     def __init__(self, k, p):
         self.p = p
         self.k = k
