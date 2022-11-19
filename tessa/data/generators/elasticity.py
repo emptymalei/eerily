@@ -1,6 +1,5 @@
 import copy
-from dataclasses import dataclass
-from typing import Dict, Iterator, NamedTuple, Optional, Sequence, Union
+from typing import Dict, Iterator, Optional, Sequence, Union
 
 from loguru import logger
 
@@ -31,9 +30,10 @@ class ElasticityStepper(BaseStepper):
     For a deterministic model, we have
 
     ```python
-    elasticity = [-3] * (length -1)
+    length = 10
+    elasticity = [-3] * length
+    prices = range(length)
     initial_condition = {"price: 0.5, "sale": 3}
-    prices = range(10)
 
     es = ElasticityStepper(
         initial_condition=initial_condition,
