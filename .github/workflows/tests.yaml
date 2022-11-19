@@ -31,5 +31,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install from source (required for the pre-commit tests)
         run: pip install ".[all]"
-      - name: Test with pytest
-        run: pytest
+      - name: Build coverage file
+        run: |
+          pytest --cache-clear --cov=app test/ > pytest-coverage.txt
+      - name: Comment coverage
+        uses: coroo/pytest-coverage-commentator@v1.0.2
