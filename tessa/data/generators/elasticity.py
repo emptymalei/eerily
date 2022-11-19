@@ -4,7 +4,7 @@ from typing import Dict, Iterator, NamedTuple, Optional, Sequence, Union
 
 from loguru import logger
 
-from tessa.data.generators.stepper import Stepper
+from tessa.data.generators.stepper import BaseStepper
 
 
 @dataclass
@@ -23,7 +23,7 @@ class ElasticityData:
         self.sales.append(new_data["sales"])
 
 
-class ElasticityStepper(Stepper):
+class ElasticityStepper(BaseStepper):
     """Generates the next time step for an given initial condition.
 
     We use the following formula to generate the data

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Stepper(ABC):
+class BaseStepper(ABC):
     """A framework to evolve a DGP to the next step"""
 
     @abstractmethod
