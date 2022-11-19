@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tessa.data.generators.elasticity import ElasticityStepper
+from tray.data.generators.elasticity import ElasticityStepper
 
 
 @pytest.fixture

@@ -1,3 +1,3 @@
-# Documentation for TESSA
+# Documentation for TRAY
 
-TimE SerieS plAygroun (TESSA) is a playground for time series.
+Time seRies plAYground (TRAY) is a playground for time series.

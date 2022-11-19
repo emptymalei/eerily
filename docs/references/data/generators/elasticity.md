@@ -1,3 +1,3 @@
 ## Data - Generators - Elasticity
 
-::: tessa.data.generators.elasticity
+::: tray.data.generators.elasticity

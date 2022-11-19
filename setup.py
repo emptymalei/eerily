@@ -3,18 +3,18 @@ import os
 from setuptools import find_packages as _find_packages
 from setuptools import setup as _setup
 
-from tessa.version import __version__
+from tray.version import __version__
 
 # read the contents of your README file
 __CWD__ = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(__CWD__, "README.md"), encoding="utf-8") as fp:
     PACKAGE_LONG_DESCRIPTION = fp.read()
 
-PACKAGE_NAME = "tessa"
+PACKAGE_NAME = "tray"
 PACKAGE_VERSION = __version__
-PACKAGE_DESCRIPTION = "TimE SerieS plAygroun (TESSA) is a playground for time series"
+PACKAGE_DESCRIPTION = "Time seRies plAYground (TRAY) is a playground for time series"
 PACKAGE_LONG_DESCRIPTION = PACKAGE_LONG_DESCRIPTION
-PACKAGE_URL = "https://github.com/emptymalei/tessa"
+PACKAGE_URL = "https://github.com/emptymalei/tray"
 
 
 def _requirements():

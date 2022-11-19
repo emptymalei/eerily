@@ -1,4 +1,4 @@
-# TESSA Changelog
+# TRAY Changelog
 
 ## 2022-11-19, 0.0.2
 

@@ -3,7 +3,7 @@ from typing import Dict, Iterator, Optional, Sequence, Union
 
 from loguru import logger
 
-from tessa.data.generators.stepper import BaseStepper
+from tray.data.generators.stepper import BaseStepper
 
 
 class ElasticityStepper(BaseStepper):

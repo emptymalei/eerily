@@ -1,11 +1,11 @@
 # mkdocs.yml
-site_name: "TESSA"
+site_name: "TRAY"
 site_author: L Ma
-site_description: "TimE SerieS plAygroun (TESSA) is a playground for time series"
-site_url: "https://emptymalei.github.io/tessa"
-repo_url: "https://github.com/emptymalei/tessa"
+site_description: "Time seRies plAYground (TRAY) is a playground for time series"
+site_url: "https://emptymalei.github.io/tray"
+repo_url: "https://github.com/emptymalei/tray"
 edit_uri: "blob/main/docs/"
-repo_name: "emptymalei/tessa"
+repo_name: "emptymalei/tray"
 
 
 theme:
