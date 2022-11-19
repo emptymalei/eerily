@@ -1,12 +1,10 @@
-import random
 import copy
 from dataclasses import dataclass
-from collections import namedtuple
-from typing import NamedTuple, Tuple
-from tessa.data.generators.stepper import Stepper
-from typing import Dict, Iterator, Iterable, Union, Optional
-import numpy as np
+from typing import Dict, Iterator, NamedTuple, Optional, Sequence, Union
+
 from loguru import logger
+
+from tessa.data.generators.stepper import Stepper
 
 
 @dataclass
@@ -72,8 +70,8 @@ class ElasticityStepper(Stepper):
     def __init__(
         self,
         initial_condition: Dict[str, float],
-        elasticity: Union[Iterator, Iterable],
-        prices: Union[Iterator, Iterable],
+        elasticity: Union[Iterator, Sequence],
+        prices: Union[Iterator, Sequence],
         length: Optional[int] = None,
     ):
         self.initial_condition = copy.deepcopy(initial_condition)
@@ -105,9 +103,7 @@ class ElasticityStepper(Stepper):
 
         price = next(self.prices)
         elasticity = next(self.elasticity)
-        sale = self.current_state["sale"] + elasticity * (
-            price - self.current_state["price"]
-        )
+        sale = self.current_state["sale"] + elasticity * (price - self.current_state["price"])
 
         self.current_state["sale"] = sale
         self.current_state["price"] = price

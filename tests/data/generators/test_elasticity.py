@@ -1,37 +1,92 @@
-from re import X
-import pytest
 import numpy as np
-import random
+import pandas as pd
+import pytest
 
-from tessa.data.generators.elasticity import ElasticityModel
-
-SEED = 42
+from tessa.data.generators.elasticity import ElasticityStepper
 
 
 @pytest.fixture
-def elasticity_model():
-
-    noise_std = 0.01
-    noise_mu = 0.05
-    true_elasticity = -3
-
-    return ElasticityModel(
-        elasticity=true_elasticity,
-        noise_mu=noise_mu,
-        noise_std=noise_std,
-        rng=np.random.default_rng(seed=SEED)
-    )
+def seed():
+    return 42
 
 
-def test_elasticity_model(elasticity_model):
-    initial_condition = (0.5, 3)
-    steps = 10
+@pytest.fixture
+def length():
+    return 10
 
-    random.seed(SEED)
-    x, y = elasticity_model.generate(initial_condition=initial_condition, steps=steps)
 
-    x_expected = np.array([0.5, 0.1, 0. , 0.4, 0.3, 0.3, 0.2, 0.1, 0.1, 0.6])
-    y_expected = np.array([3.        , 4.2636566 , 4.57553665, 3.30653124, 3.62435293, 3.62435293, 3.93544639, 4.25082992, 4.25082992, 2.67608193])
+@pytest.fixture
+def deterministic_elasticity_stepper(length):
 
-    assert np.allclose(x, x_expected, rtol=1e-2, atol=1e-2)
-    assert np.allclose(y, y_expected)
+    elasticity = [-3] * length
+    prices = range(length)
+
+    initial_condition = {"price": 0.5, "sale": 3}
+
+    return ElasticityStepper(initial_condition=initial_condition, elasticity=elasticity, prices=prices)
+
+
+def test_deterministic_elasticity_stepper(deterministic_elasticity_stepper, length):
+
+    container = []
+    for _ in range(length):
+        container.append(next(deterministic_elasticity_stepper))
+
+    container_truth = [
+        {"price": 0, "sale": 4.5, "elasticity": -3},
+        {"price": 1, "sale": 1.5, "elasticity": -3},
+        {"price": 2, "sale": -1.5, "elasticity": -3},
+        {"price": 3, "sale": -4.5, "elasticity": -3},
+        {"price": 4, "sale": -7.5, "elasticity": -3},
+        {"price": 5, "sale": -10.5, "elasticity": -3},
+        {"price": 6, "sale": -13.5, "elasticity": -3},
+        {"price": 7, "sale": -16.5, "elasticity": -3},
+        {"price": 8, "sale": -19.5, "elasticity": -3},
+        {"price": 9, "sale": -22.5, "elasticity": -3},
+    ]
+
+    assert container == container_truth
+
+
+@pytest.fixture
+def gaussian_elasticity(length, seed):
+
+    rng = np.random.default_rng(seed=seed)
+    elasticity_mean = -3
+    elasticity_std = 0.5
+    elasticity = rng.normal(elasticity_mean, elasticity_std, length)
+
+    return elasticity
+
+
+@pytest.fixture
+def stochastic_elasticity_stepper(gaussian_elasticity, length):
+
+    elasticity = gaussian_elasticity
+    prices = range(length)
+
+    initial_condition = {"price": 0.5, "sale": 3}
+
+    return ElasticityStepper(initial_condition=initial_condition, elasticity=elasticity, prices=prices)
+
+
+def test_stochastic_elasticity_stepper(stochastic_elasticity_stepper, length):
+
+    container = []
+    for _ in range(length):
+        container.append(next(stochastic_elasticity_stepper))
+
+    container_truth = [
+        {"price": 0, "sale": 4.423820730061392, "elasticity": -2.847641460122784},
+        {"price": 1, "sale": 0.9038286769411439, "elasticity": -3.519992053120248},
+        {"price": 2, "sale": -1.7209457251556275, "elasticity": -2.6247744020967714},
+        {"price": 3, "sale": -4.250663366960021, "elasticity": -2.529717641804393},
+        {"price": 4, "sale": -8.22618096128694, "elasticity": -3.9755175943269183},
+        {"price": 5, "sale": -11.877270714718097, "elasticity": -3.651089753431159},
+        {"price": 6, "sale": -14.813350513134456, "elasticity": -2.9360797984163574},
+        {"price": 7, "sale": -17.971471809306248, "elasticity": -3.158121296171791},
+        {"price": 8, "sale": -20.979872388058393, "elasticity": -3.0084005787521444},
+        {"price": 9, "sale": -24.406394351845183, "elasticity": -3.42652196378679},
+    ]
+
+    pd.testing.assert_frame_equal(pd.DataFrame(container), pd.DataFrame(container_truth), check_like=True)
