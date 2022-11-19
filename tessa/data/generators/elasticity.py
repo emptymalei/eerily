@@ -7,22 +7,6 @@ from loguru import logger
 from tessa.data.generators.stepper import BaseStepper
 
 
-@dataclass
-class ElasticityData:
-    elasticity: list
-    prices: list
-    sales: list
-
-    def append(self, new_data: Dict[str, float]) -> None:
-        """Append new data point to the existing data
-
-        :param new_data:
-        """
-        self.elasticity.append(new_data["elasticity"])
-        self.prices.append(new_data["prices"])
-        self.sales.append(new_data["sales"])
-
-
 class ElasticityStepper(BaseStepper):
     """Generates the next time step for an given initial condition.
 
