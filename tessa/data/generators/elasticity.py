@@ -49,8 +49,7 @@ class ElasticityStepper(Stepper):
     For a deterministic model, we have
 
     ```python
-    elasticity=-3
-
+    elasticity = [-3] * (length -1)
     initial_condition = {"price: 0.5, "sale": 3}
     prices = range(10)
 
@@ -62,6 +61,11 @@ class ElasticityStepper(Stepper):
 
     next(es)
     ```
+
+    !!! warning "Initial Condition"
+        Initial condition is a dictionary with at least two keys `sale` and `price`.
+
+        Note that the initial condition is NOT returned in the iterator.
 
     """
 
@@ -80,12 +84,12 @@ class ElasticityStepper(Stepper):
         self.length = length
 
         if not isinstance(self.prices, Iterator):
-            self.prices = iter(self.prices)
             self.length = len(self.prices)
+            self.prices = iter(self.prices)
 
         if not isinstance(self.elasticity, Iterator):
-            self.elasticity = iter(self.elasticity)
             elasticity_length = len(self.elasticity)
+            self.elasticity = iter(self.elasticity)
             if (self.length is not None) and (elasticity_length != self.length):
                 logger.warning(
                     f"elasticity length {elasticity_length} is different "
@@ -101,7 +105,7 @@ class ElasticityStepper(Stepper):
 
         price = next(self.prices)
         elasticity = next(self.elasticity)
-        sale = self.current_state["target"] + elasticity * (
+        sale = self.current_state["sale"] + elasticity * (
             price - self.current_state["price"]
         )
 
