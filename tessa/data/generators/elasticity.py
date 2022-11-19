@@ -1,12 +1,13 @@
-import random
-from collections import namedtuple
-from typing import NamedTuple, Tuple
+import copy
+from typing import Dict, Iterator, Optional, Sequence, Union
 
-import numpy as np
+from loguru import logger
+
+from tessa.data.generators.stepper import BaseStepper
 
 
-class ElasticityModel:
-    """A elasticty data generator
+class ElasticityStepper(BaseStepper):
+    """Generates the next time step for an given initial condition.
 
     We use the following formula to generate the data
 
@@ -20,80 +21,83 @@ class ElasticityModel:
     y' = y + \epsilon (x' - x).
     $$
 
+    For example, with initial condition
+
+    ```
+    initial_condition = {"price": 0, "sales": 10}
+    ```
+
+    For a deterministic model, we have
+
     ```python
+    length = 10
+    elasticity = [-3] * length
+    prices = range(length)
+    initial_condition = {"price: 0.5, "sale": 3}
 
-    noise_std = 0.01
-    noise_mu = 0.05
-    true_elasticity=-3
-
-    em = ElasticityModel(
-        elasticity=true_elasticity,
-        noise_mu=noise_mu,
-        noise_std=noise_std,
+    es = ElasticityStepper(
+        initial_condition=initial_condition,
+        elasticity=elasticity,
+        prices=prices
     )
 
-    initial_condition = (0.5, 3)
-    steps = 1000
-
-    em(initial_condition=initial_condition, steps=steps)
+    next(es)
     ```
+
+    !!! warning "Initial Condition"
+        Initial condition is a dictionary with at least two keys `sale` and `price`.
+
+        Note that the initial condition is NOT returned in the iterator.
+
     """
 
     def __init__(
         self,
-        elasticity: float,
-        noise_mu: float,
-        noise_std: float,
-        covariate_levels: np.ndarray = np.linspace(0, 0.7, 8),
-        rng: np.random.Generator = np.random.default_rng(),
+        initial_condition: Dict[str, float],
+        elasticity: Union[Iterator, Sequence],
+        prices: Union[Iterator, Sequence],
+        length: Optional[int] = None,
     ):
-
+        self.initial_condition = copy.deepcopy(initial_condition)
+        self.current_state = copy.deepcopy(initial_condition)
         self.elasticity = elasticity
-        self.rng = rng
-        self.covariate_levels = covariate_levels
-        self.noise_std = noise_std
-        self.noise_mu = noise_mu
+        self.prices = prices
 
-        Meta = namedtuple(
-            "Meta",
-            [
-                "elasticity",
-                "covariate_levels",
-                "noise_mu",
-                "noise_std",
-            ],
+        self.length = length
+
+        if not isinstance(self.prices, Iterator):
+            self.length = len(self.prices)
+            self.prices = iter(self.prices)
+
+        if not isinstance(self.elasticity, Iterator):
+            elasticity_length = len(self.elasticity)
+            self.elasticity = iter(self.elasticity)
+            if (self.length is not None) and (elasticity_length != self.length):
+                logger.warning(
+                    f"elasticity length {elasticity_length} is different "
+                    f"from prices length {self.length}; "
+                    "Setting length to the min of the two."
+                )
+            self.length = min(self.length, elasticity_length)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+
+        price = next(self.prices)
+        elasticity = next(self.elasticity)
+        sale = self.current_state["sale"] + elasticity * (price - self.current_state["price"])
+
+        self.current_state["sale"] = sale
+        self.current_state["price"] = price
+        self.current_state["elasticity"] = elasticity
+
+        return copy.deepcopy(self.current_state)
+
+    def __repr__(self) -> str:
+        return (
+            "ElasticityStepper: \n"
+            f"initial_condition: {self.initial_condition}\n"
+            f"current_state: {self.current_state}"
         )
-
-        self.meta = Meta(
-            elasticity=elasticity,
-            covariate_levels=covariate_levels,
-            noise_mu=noise_mu,
-            noise_std=noise_std,
-        )
-
-    def generate(
-        self,
-        initial_condition: Tuple[float, float],
-        steps: int,
-    ) -> NamedTuple:
-
-        x_series = [initial_condition[0]]
-        y_series = [initial_condition[1]]
-
-        epsilon_noise = self.rng.normal(self.noise_mu, self.noise_std, steps)
-        for i in range(steps - 1):
-            xp = random.choice(self.covariate_levels)
-            yp = y_series[-1] + self.elasticity * (1 + epsilon_noise[i]) * (xp - x_series[-1])
-            x_series.append(xp)
-            y_series.append(yp)
-
-        Data = namedtuple("Data", ["x", "y"])
-
-        return Data(x=np.array(x_series), y=np.array(y_series))
-
-    def __call__(
-        self,
-        initial_condition: Tuple[float, float],
-        steps: int,
-    ) -> NamedTuple:
-        return self.generate(initial_condition, steps)
