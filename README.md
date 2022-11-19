@@ -1,3 +1,3 @@
-# TRAY
+# EERILY
 
-Time seRies plAYground (TRAY) is a playground for time series.
+timE sERIes pLaYground (EERILY) is a playground for time series.

@@ -1,4 +1,4 @@
 ## Data - Generators - Stepper
 
 
-::: tray.data.generators.stepper
+::: eerily.data.generators.stepper

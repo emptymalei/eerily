@@ -1,11 +1,11 @@
 # mkdocs.yml
-site_name: "TRAY"
+site_name: "EERILY"
 site_author: L Ma
-site_description: "Time seRies plAYground (TRAY) is a playground for time series"
-site_url: "https://emptymalei.github.io/tray"
-repo_url: "https://github.com/emptymalei/tray"
+site_description: "timE sERIes pLaYground (EERILY) is a playground for time series"
+site_url: "https://emptymalei.github.io/eerily"
+repo_url: "https://github.com/emptymalei/eerily"
 edit_uri: "blob/main/docs/"
-repo_name: "emptymalei/tray"
+repo_name: "emptymalei/eerily"
 
 
 theme:

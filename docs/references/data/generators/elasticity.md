@@ -1,3 +1,3 @@
 ## Data - Generators - Elasticity
 
-::: tray.data.generators.elasticity
+::: eerily.data.generators.elasticity

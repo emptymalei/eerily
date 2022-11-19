@@ -1,3 +1,3 @@
-# Documentation for TRAY
+# Documentation for eerily
 
-Time seRies plAYground (TRAY) is a playground for time series.
+timE sERIes pLaYground  (eerily) is a playground for time series.
