@@ -1,28 +1,27 @@
 import copy
-from typing import Dict, Iterator, Optional, Sequence, Union
+from dataclasses import dataclass
+from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
 
 import numpy as np
 
-from eerily.data.generators.stepper import BaseStepper
+from eerily.data.generators.stepper import BaseStepper, StepperModelParams
 
 
-class GaussianForce:
-    """A Gaussian stochastic force iterator.
-    Each iteration returns a single sample from the corresponding
-    Gaussian distribution.
+@dataclass(frozen=True)
+class BrownianMotionParams(StepperModelParams):
+    """
+    Parameters for Brownian motion
 
-    :param mu: mean of the Gaussian distribution
-    :param std: standard deviation of the Gaussian distribution
-    :param seed: seed for the random generator
+    :param gamma: the damping factor $\gamma$ of the Brownian motion.
+    :param delta_t: the minimum time step $\Delta t$.
+    :param force_densities: the stochastic force densities, e.g. [`GaussianNoise`][eerily.data.generators.noise.GaussianNoise].
+    :param initial_state: the initial velocity $v(0)$.
+    :param variable_names: variable names of the given initial condition
     """
 
-    def __init__(self, mu: float, std: float, seed: Optional[float] = None):
-        self.mu = mu
-        self.std = std
-        self.rng = np.random.default_rng(seed=seed)
-
-    def __next__(self) -> float:
-        return self.rng.normal(self.mu, self.std)
+    gamma: float
+    delta_t: float
+    force_densities: Iterator
 
 
 class BrownianMotionStepper(BaseStepper):
@@ -49,43 +48,32 @@ class BrownianMotionStepper(BaseStepper):
 
         ```python
         guassian_force = GaussianForce(mu=0, std=1, seed=seed)
+        bm_params = BrownianMotionParams(
+            gamma=0, delta_t=0.1, force_densities=guassian_force, initial_state=np.array([0]),
+            variable_names=["v"]
+        )
 
         bms = BrownianMotionStepper(
-            gamma=0, delta_t=0.1, force_densities=guassian_force, initial_state={"v": 0}
+            model_params = bm_params
         )
 
         next(bms)
         ```
 
-    :param gamma: the damping factor $\gamma$ of the Brownian motion.
-    :param delta_t: the minimum time step $\Delta t$.
-    :param force_densities: the stochastic force densities, e.g. [`GaussianForce`][eerily.data.generators.brownian.GaussianForce].
-    :param initial_state: the initial velocity $v(0)$.
+    :param model_params: a dataclass that contains the necessary parameters for the model.
+        e.g., [`BrownianMotionParams`][eerily.data.generators.brownian.BrownianMotionParams]
     """
-
-    def __init__(
-        self,
-        gamma: float,
-        delta_t: float,
-        force_densities: Iterator,
-        initial_state: Dict[str, float],
-    ):
-        self.gamma = gamma
-        self.delta_t = delta_t
-        self.forece_densities = copy.deepcopy(force_densities)
-        self.current_state = copy.deepcopy(initial_state)
-
-    def __iter__(self):
-        return self
 
     def __next__(self) -> Dict[str, float]:
 
-        force_density = next(self.forece_densities)
-        v_current = self.current_state["v"]
+        force_density = next(self.model_params.force_densities)
 
-        v_next = v_current + force_density * self.delta_t - self.gamma * v_current * self.delta_t
+        v_next = (
+            self.current_state
+            + force_density * self.model_params.delta_t
+            - self.model_params.gamma * self.current_state * self.model_params.delta_t
+        )
 
-        self.current_state["force_density"] = force_density
-        self.current_state["v"] = v_next
+        self.current_state = v_next
 
         return copy.deepcopy(self.current_state)
