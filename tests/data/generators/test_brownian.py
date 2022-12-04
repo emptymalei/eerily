@@ -1,7 +1,8 @@
 import pandas as pd
 import pytest
 
-from eerily.data.generators.brownian import BrownianMotionStepper, GaussianForce
+from eerily.data.generators.brownian import BrownianMotionParams, BrownianMotionStepper
+from eerily.data.generators.noise import GaussianNoise
 
 
 @pytest.fixture
@@ -15,14 +16,21 @@ def length():
 
 
 @pytest.fixture
-def guassian_force(seed):
-    return GaussianForce(mu=0, std=1, seed=seed)
+def gaussian_force(seed):
+    return GaussianNoise(mu=0, std=1, seed=seed)
 
 
 @pytest.fixture
-def brownian_motion_stepper(guassian_force):
+def brownian_motion_params(gaussian_force):
 
-    return BrownianMotionStepper(gamma=0, delta_t=0.1, force_densities=guassian_force, initial_state={"v": 0})
+    model_params = BrownianMotionParams(gamma=0, delta_t=0.1, force_densities=gaussian_force, initial_state={"v": 0})
+
+    return model_params
+
+
+@pytest.fixture
+def brownian_motion_stepper(brownian_motion_params):
+    return BrownianMotionStepper(model_params=brownian_motion_params)
 
 
 def test_brownian_motion_stepper(brownian_motion_stepper, length):
