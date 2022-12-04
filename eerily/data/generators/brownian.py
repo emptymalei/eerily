@@ -4,11 +4,11 @@ from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
 
 import numpy as np
 
-from eerily.data.generators.stepper import BaseStepper
+from eerily.data.generators.stepper import BaseStepper, StepperModelParams
 
 
 @dataclass(frozen=True)
-class BrownianMotionParams:
+class BrownianMotionParams(StepperModelParams):
     """
     Parameters for Brownian motion
 
@@ -22,8 +22,6 @@ class BrownianMotionParams:
     gamma: float
     delta_t: float
     force_densities: Iterator
-    initial_state: np.ndarray
-    variable_names: List[str]
 
 
 class BrownianMotionStepper(BaseStepper):
@@ -66,17 +64,9 @@ class BrownianMotionStepper(BaseStepper):
         e.g., [`BrownianMotionParams`][eerily.data.generators.brownian.BrownianMotionParams]
     """
 
-    def __init__(self, model_params: Any):
-        self.model_params = model_params
-        self.current_state = copy.deepcopy(self.model_params.initial_state)
-        self.force_densities = self.model_params.force_densities
-
-    def __iter__(self):
-        return self
-
     def __next__(self) -> Dict[str, float]:
 
-        force_density = next(self.force_densities)
+        force_density = next(self.model_params.force_densities)
 
         v_next = (
             self.current_state
