@@ -23,7 +23,13 @@ def gaussian_force(seed):
 @pytest.fixture
 def brownian_motion_params(gaussian_force):
 
-    model_params = BrownianMotionParams(gamma=0, delta_t=0.1, force_densities=gaussian_force, initial_state={"v": 0})
+    model_params = BrownianMotionParams(
+        gamma=0,
+        delta_t=0.1,
+        force_densities=gaussian_force,
+        initial_state=np.array([0]),
+        variable_names=["v"],
+    )
 
     return model_params
 

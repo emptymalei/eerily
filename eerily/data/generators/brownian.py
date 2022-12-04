@@ -1,13 +1,13 @@
 import copy
 from dataclasses import dataclass
-from typing import Any, Dict, Iterator, Optional, Sequence, Union
+from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
 
 import numpy as np
 
 from eerily.data.generators.stepper import BaseStepper
 
 
-@dataclass
+@dataclass(frozen=True)
 class BrownianMotionParams:
     """
     Parameters for Brownian motion
@@ -16,12 +16,14 @@ class BrownianMotionParams:
     :param delta_t: the minimum time step $\Delta t$.
     :param force_densities: the stochastic force densities, e.g. [`GaussianNoise`][eerily.data.generators.noise.GaussianNoise].
     :param initial_state: the initial velocity $v(0)$.
+    :param variable_names: variable names of the given initial condition
     """
 
     gamma: float
     delta_t: float
     force_densities: Iterator
-    initial_state: Dict[str, float]
+    initial_state: np.ndarray
+    variable_names: List[str]
 
 
 class BrownianMotionStepper(BaseStepper):
@@ -49,7 +51,8 @@ class BrownianMotionStepper(BaseStepper):
         ```python
         guassian_force = GaussianForce(mu=0, std=1, seed=seed)
         bm_params = BrownianMotionParams(
-            gamma=0, delta_t=0.1, force_densities=guassian_force, initial_state={"v": 0}
+            gamma=0, delta_t=0.1, force_densities=guassian_force, initial_state=np.array([0]),
+            variable_names=["v"]
         )
 
         bms = BrownianMotionStepper(
@@ -66,23 +69,21 @@ class BrownianMotionStepper(BaseStepper):
     def __init__(self, model_params: Any):
         self.model_params = model_params
         self.current_state = copy.deepcopy(self.model_params.initial_state)
-        self.forece_densities = self.model_params.force_densities
+        self.force_densities = self.model_params.force_densities
 
     def __iter__(self):
         return self
 
     def __next__(self) -> Dict[str, float]:
 
-        force_density = next(self.forece_densities)
-        v_current = self.current_state["v"]
+        force_density = next(self.force_densities)
 
         v_next = (
-            v_current
+            self.current_state
             + force_density * self.model_params.delta_t
-            - self.model_params.gamma * v_current * self.model_params.delta_t
+            - self.model_params.gamma * self.current_state * self.model_params.delta_t
         )
 
-        self.current_state["force_density"] = force_density
-        self.current_state["v"] = v_next
+        self.current_state = v_next
 
         return copy.deepcopy(self.current_state)
