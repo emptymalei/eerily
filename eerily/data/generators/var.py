@@ -9,9 +9,13 @@ from eerily.data.generators.stepper import BaseStepper, StepperModelParams
 
 @dataclass(frozen=True)
 class VAR1ModelParams(StepperModelParams):
-    """Parameters of our VAR model,
+    r"""Parameters of our VAR model,
 
-    $$\begin{pmatrix}s^{(1)}(t+1) \\ s^{(2)}(t+1) \end{pmatrix} = \begin{pmatrix} \phi^{(1)}_0 \\ \phi^{(2)}_0 \end{pmatrix} +  \begin{pmatrix}\phi_{1, 11} & \phi_{1, 12}\\ \phi_{1, 21} & \phi_{1, 22} \end{pmatrix} \begin{pmatrix}s^{(1)}(t) \\ s^{(2)}(t) \end{pmatrix} + \begin{pmatrix}\epsilon^{(1)} \\ \epsilon^{(2)} \end{pmatrix}.$$
+    $$
+    \begin{equation}
+    \begin{pmatrix}s^{(1)}(t+1) \\ s^{(2)}(t+1) \end{pmatrix} = \begin{pmatrix} \phi^{(1)}_0 \\ \phi^{(2)}_0 \end{pmatrix} +  \begin{pmatrix}\phi_{1, 11} & \phi_{1, 12}\\ \phi_{1, 21} & \phi_{1, 22} \end{pmatrix} \begin{pmatrix}s^{(1)}(t) \\ s^{(2)}(t) \end{pmatrix} + \begin{pmatrix}\epsilon^{(1)} \\ \epsilon^{(2)} \end{pmatrix}.
+    \end{equation}
+    $$
 
     :param delta_t: step size of time in each iteration
     :param phi0: pho_0 in the AR model
