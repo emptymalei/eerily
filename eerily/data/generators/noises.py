@@ -20,6 +20,23 @@ class GaussianNoise:
         return self.rng.normal(self.mu, self.std)
 
 
+class LogNormalNoise:
+    """1 D lognormal noise
+
+    :param mu: mean of the Gaussian distribution
+    :param std: standard deviation of the Gaussian distribution
+    :param seed: seed of the RNG for reproducibility
+    """
+
+    def __init__(self, mu: float, std: float, seed: Optional[float] = None):
+        self.mu = mu
+        self.std = std
+        self.rng = np.random.default_rng(seed=seed)
+
+    def __next__(self) -> float:
+        return self.rng.lognormal(self.mu, self.std)
+
+
 class MultiGaussianNoise:
     """A multivariate Gaussian noise
 
