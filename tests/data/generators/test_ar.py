@@ -48,7 +48,18 @@ def test_ar_stepper(ar_stepper, length):
         container = np.append(container, next(ar_stepper))
 
     container_truth = np.array(
-        [-1.1, -1.21, -1.331, -1.4641, -1.61051, -1.771561, -1.9487171, -2.14358881, -2.357947691, -2.5937424601]
+        [
+            -1.1,
+            -1.21,
+            -1.331,
+            -1.4641,
+            -1.61051,
+            -1.771561,
+            -1.9487171,
+            -2.14358881,
+            -2.357947691,
+            -2.5937424601,
+        ]
     )
 
     np.testing.assert_allclose(container, container_truth)

@@ -80,9 +80,11 @@ nav:
       - "data.generators":
         - references/data/generators/index.md
         - "data.generators.stepper": references/data/generators/stepper.md
-        - "data.generators.noise": references/data/generators/noise.md
+        - "data.generators.noises": references/data/generators/noises.md
+        - "data.generators.events": references/data/generators/events.md
         - "data.generators.ar": references/data/generators/ar.md
         - "data.generators.var": references/data/generators/var.md
+        - "data.generators.spiking": references/data/generators/spiking.md
         - "data.generators.elasticity": references/data/generators/elasticity.md
         - "data.generators.brownian": references/data/generators/brownian.md
   - "Changelog": changelog.md
