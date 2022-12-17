@@ -12,7 +12,8 @@ class BrownianMotionParams(StepperModelParams):
 
     :param gamma: the damping factor $\gamma$ of the Brownian motion.
     :param delta_t: the minimum time step $\Delta t$.
-    :param force_densities: the stochastic force densities, e.g. [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise].
+    :param force_densities: the stochastic force densities, e.g.
+        [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise].
     :param initial_state: the initial velocity $v(0)$.
     :param variable_names: variable names of the given initial condition
     """
