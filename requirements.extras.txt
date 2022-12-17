@@ -5,7 +5,9 @@
 # Reference: https://hanxiao.io/2019/11/07/A-Better-Practice-for-Managing-extras-require-Dependencies-in-Python/
 
 isort==5.10.1: tests
+matplotlib>=3.6.2: docs
 mkdocs-autorefs>=0.1.1: docs
+mkdocs-jupyter>=0.22.0: docs
 mkdocs-material>=0.4.4: docs
 mkdocstrings-python>=0.8.0: docs
 mkdocstrings[python]>=0.15.0: docs
