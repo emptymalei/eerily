@@ -208,3 +208,5 @@ Temporary Items
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+docs/tutorials/*.ipynb

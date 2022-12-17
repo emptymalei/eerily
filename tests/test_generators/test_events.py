@@ -1,6 +1,6 @@
 import pytest
 
-from eerily.data.generators.events import PoissonEvents
+from eerily.generators.utils.events import PoissonEvent
 
 
 @pytest.mark.parametrize(
@@ -13,7 +13,7 @@ from eerily.data.generators.events import PoissonEvents
 )
 def test_poisson_events(rate, expected):
     seed = 42
-    pe = PoissonEvents(rate=rate, seed=seed)
+    pe = PoissonEvent(rate=rate, seed=seed)
 
     length = 10
     events = [next(pe) for _ in range(length)]

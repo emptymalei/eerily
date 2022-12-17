@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
 
-from eerily.data.generators.events import PoissonEvents
-from eerily.data.generators.noises import LogNormalNoise
-from eerily.data.generators.spiking import SpikingEventParams, SpikingEventStepper
+from eerily.generators.spiking import SpikingEventParams, SpikingEventStepper
+from eerily.generators.utils.events import PoissonEvent
+from eerily.generators.utils.noises import LogNormalNoise
 
 
 @pytest.mark.parametrize(
@@ -34,7 +34,7 @@ def test_spiking_event_stepper(spike_rate, spike_level_mu, spike_level_std, back
 
     seed = 42
 
-    spike = PoissonEvents(rate=spike_rate, seed=seed)
+    spike = PoissonEvent(rate=spike_rate, seed=seed)
     spike_noise = LogNormalNoise(mu=spike_level_mu, std=spike_level_std, seed=seed)
     background = LogNormalNoise(mu=background_mu, std=background_std, seed=seed)
 

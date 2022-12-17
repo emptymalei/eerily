@@ -66,6 +66,10 @@ plugins:
             docstring_style: sphinx
       watch:
         - docs
+  - mkdocs-jupyter:
+      execute: True
+      allow_errors: false
+
 
 extra_javascript:
   - javascripts/mathjax.js
@@ -74,17 +78,19 @@ extra_javascript:
 
 nav:
   - "Home": index.md
+  - "Tutorials":
+    - "Generator Utilities": tutorials/generators_utils.py
+    - "Generator Stepper": tutorials/generators_stepper.py
   - References:
     - "Introduction": references/index.md
-    - "Data":
-      - "data.generators":
-        - references/data/generators/index.md
-        - "data.generators.stepper": references/data/generators/stepper.md
-        - "data.generators.noises": references/data/generators/noises.md
-        - "data.generators.events": references/data/generators/events.md
-        - "data.generators.ar": references/data/generators/ar.md
-        - "data.generators.var": references/data/generators/var.md
-        - "data.generators.spiking": references/data/generators/spiking.md
-        - "data.generators.elasticity": references/data/generators/elasticity.md
-        - "data.generators.brownian": references/data/generators/brownian.md
+    - "Data Generators":
+        - references/generators/index.md
+        - "generators.utils":
+          - "generators.utils.stepper": references/generators/utils/stepper.md
+          - "generators.utils.noises": references/generators/utils/noises.md
+          - "generators.utils.events": references/generators/utils/events.md
+        - "generators.var": references/data/generators/var.md
+        - "generators.spiking": references/data/generators/spiking.md
+        - "generators.brownian": references/data/generators/brownian.md
+        - "generators.elasticity": references/data/generators/elasticity.md
   - "Changelog": changelog.md

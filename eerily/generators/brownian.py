@@ -1,10 +1,8 @@
 import copy
 from dataclasses import dataclass
-from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
+from typing import Dict, Iterator
 
-import numpy as np
-
-from eerily.data.generators.stepper import BaseStepper, StepperModelParams
+from eerily.generators.utils.stepper import BaseStepper, StepperModelParams
 
 
 @dataclass(frozen=True)
@@ -14,7 +12,8 @@ class BrownianMotionParams(StepperModelParams):
 
     :param gamma: the damping factor $\gamma$ of the Brownian motion.
     :param delta_t: the minimum time step $\Delta t$.
-    :param force_densities: the stochastic force densities, e.g. [`GaussianNoise`][eerily.data.generators.noise.GaussianNoise].
+    :param force_densities: the stochastic force densities, e.g.
+        [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise].
     :param initial_state: the initial velocity $v(0)$.
     :param variable_names: variable names of the given initial condition
     """
@@ -61,7 +60,7 @@ class BrownianMotionStepper(BaseStepper):
         ```
 
     :param model_params: a dataclass that contains the necessary parameters for the model.
-        e.g., [`BrownianMotionParams`][eerily.data.generators.brownian.BrownianMotionParams]
+        e.g., [`BrownianMotionParams`][eerily.generators.brownian.BrownianMotionParams]
     """
 
     def __next__(self) -> Dict[str, float]:
