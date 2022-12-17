@@ -1,6 +1,6 @@
 import copy
 from dataclasses import dataclass
-from typing import Dict, Iterator, List
+from typing import Iterator
 
 import numpy as np
 
@@ -17,7 +17,8 @@ class ARModelParams(StepperModelParams):
     :param phi0: pho_0 in the AR model
     :param phi1: pho_1 in the AR model
     :param epsilon: noise iterator, e.g., Gaussian noise
-    :param initial_state: a dictionary of the initial state, e.g., `np.array([1])`
+    :param initial_state: a dictionary of the initial state,
+        e.g., `np.array([1])`
     :param variable_name: variable names
     """
 
@@ -48,7 +49,11 @@ class VAR1ModelParams(StepperModelParams):
 
     $$
     \begin{equation}
-    \begin{pmatrix}s^{(1)}(t+1) \\ s^{(2)}(t+1) \end{pmatrix} = \begin{pmatrix} \phi^{(1)}_0 \\ \phi^{(2)}_0 \end{pmatrix} +  \begin{pmatrix}\phi_{1, 11} & \phi_{1, 12}\\ \phi_{1, 21} & \phi_{1, 22} \end{pmatrix} \begin{pmatrix}s^{(1)}(t) \\ s^{(2)}(t) \end{pmatrix} + \begin{pmatrix}\epsilon^{(1)} \\ \epsilon^{(2)} \end{pmatrix}.
+    \begin{pmatrix}s^{(1)}(t+1) \\ s^{(2)}(t+1) \end{pmatrix} =
+    \begin{pmatrix} \phi^{(1)}_0 \\ \phi^{(2)}_0 \end{pmatrix} +
+    \begin{pmatrix}\phi_{1, 11} & \phi_{1, 12}\\ \phi_{1, 21} & \phi_{1, 22} \end{pmatrix}
+    \begin{pmatrix}s^{(1)}(t) \\ s^{(2)}(t) \end{pmatrix} +
+    \begin{pmatrix}\epsilon^{(1)} \\ \epsilon^{(2)} \end{pmatrix}.
     \end{equation}
     $$
 

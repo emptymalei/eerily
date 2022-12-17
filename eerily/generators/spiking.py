@@ -1,10 +1,7 @@
 import copy
 from dataclasses import dataclass
-from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
+from typing import Dict, Iterator
 
-import numpy as np
-
-from eerily.generators.utils.events import PoissonEvents
 from eerily.generators.utils.stepper import BaseStepper, StepperModelParams
 
 
@@ -13,9 +10,13 @@ class SpikingEventParams(StepperModelParams):
     """
     Parameters for spiking events.
 
-    :param spike: the spiking process, e.g., Poisson process using [`PoissonEvents`][eerily.generators.utils.events.PoissonEvents].
-    :param spike_level: the level of spikes, e.g. [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise] with some positve mean. This parameter determines the height of the spikes.
-    :param background: the stochastic noise level, e.g. [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise].
+    :param spike: the spiking process, e.g., Poisson process using
+        [`PoissonEvents`][eerily.generators.utils.events.PoissonEvents].
+    :param spike_level: the level of spikes, e.g.
+        [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise]
+        with some positve mean. This parameter determines the height of the spikes.
+    :param background: the stochastic noise level, e.g.
+        [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise].
     """
 
     spike: Iterator
