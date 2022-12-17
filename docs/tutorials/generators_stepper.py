@@ -5,9 +5,10 @@
 # Stepper is the core of the data generators. In EERILY, we create iterators called steppers which we can iterate over to get the samples.
 # In this tutorial we generate some neuronal spiking time series.
 
-import matplotlib.pyplot as plt
 
 # %%
+import matplotlib.pyplot as plt
+
 from eerily.generators.spiking import SpikingEventParams, SpikingEventStepper
 from eerily.generators.utils.events import PoissonEvent
 from eerily.generators.utils.noises import LogNormalNoise
