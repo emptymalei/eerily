@@ -4,8 +4,8 @@ from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
 
 import numpy as np
 
-from eerily.data.generators.events import PoissonEvents
-from eerily.data.generators.stepper import BaseStepper, StepperModelParams
+from eerily.generators.utils.events import PoissonEvents
+from eerily.generators.utils.stepper import BaseStepper, StepperModelParams
 
 
 @dataclass(frozen=True)
@@ -13,21 +13,27 @@ class SpikingEventParams(StepperModelParams):
     """
     Parameters for spiking events.
 
-    :param spike: the spiking process, e.g., Poisson process.
-    :param spike_level: the level of spikes, e.g. [`GaussianNoise`][eerily.data.generators.noise.GaussianNoise] with some positve mean. This parameter determines the height of the spikes.
-    :param background: the stochastic noise level, e.g. [`GaussianNoise`][eerily.data.generators.noise.GaussianNoise].
+    :param spike: the spiking process, e.g., Poisson process using [`PoissonEvents`][eerily.generators.utils.events.PoissonEvents].
+    :param spike_level: the level of spikes, e.g. [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise] with some positve mean. This parameter determines the height of the spikes.
+    :param background: the stochastic noise level, e.g. [`GaussianNoise`][eerily.generators.utils.noise.GaussianNoise].
     """
 
     spike: Iterator
     spike_level: Iterator
     background: Iterator
 
+    def __post_init__(self):
+        if self.initial_state is None:
+            self.initial_state = 0
+        if self.variable_names is None:
+            self.variable_names = ["event"]
+
 
 class SpikingEventStepper(BaseStepper):
     """Calculates the next step in a spiking event.
 
     :param model_params: a dataclass that contains the necessary parameters for the model.
-        e.g., [`SpikingEventParams`][eerily.data.generators.spiking.SpikingEventParams]
+        e.g., [`SpikingEventParams`][eerily.generators.spiking.SpikingEventParams]
     """
 
     def __next__(self) -> Dict[str, float]:

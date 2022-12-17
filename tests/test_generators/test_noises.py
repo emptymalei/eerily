@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from eerily.data.generators.noises import LogNormalNoise
+from eerily.generators.utils.noises import LogNormalNoise
 
 
 @pytest.mark.parametrize(

@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
 
-from eerily.data.generators.events import PoissonEvents
-from eerily.data.generators.noises import LogNormalNoise
-from eerily.data.generators.spiking import SpikingEventParams, SpikingEventStepper
+from eerily.generators.spiking import SpikingEventParams, SpikingEventStepper
+from eerily.generators.utils.events import PoissonEvents
+from eerily.generators.utils.noises import LogNormalNoise
 
 
 @pytest.mark.parametrize(

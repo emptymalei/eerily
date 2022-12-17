@@ -3,7 +3,7 @@ from typing import Dict, Iterator, Optional, Sequence, Union
 
 from loguru import logger
 
-from eerily.data.generators.stepper import BaseStepper
+from eerily.generators.utils.stepper import BaseStepper
 
 
 class ElasticityStepper(BaseStepper):

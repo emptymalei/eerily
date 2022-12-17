@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from eerily.data.generators.brownian import BrownianMotionParams, BrownianMotionStepper
-from eerily.data.generators.noises import GaussianNoise
+from eerily.generators.brownian import BrownianMotionParams, BrownianMotionStepper
+from eerily.generators.utils.noises import GaussianNoise
 
 
 @pytest.fixture

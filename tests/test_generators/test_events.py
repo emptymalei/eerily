@@ -1,6 +1,6 @@
 import pytest
 
-from eerily.data.generators.events import PoissonEvents
+from eerily.generators.utils.events import PoissonEvents
 
 
 @pytest.mark.parametrize(
