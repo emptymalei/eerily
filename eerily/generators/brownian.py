@@ -1,8 +1,6 @@
 import copy
 from dataclasses import dataclass
-from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
-
-import numpy as np
+from typing import Dict, Iterator
 
 from eerily.generators.utils.stepper import BaseStepper, StepperModelParams
 
