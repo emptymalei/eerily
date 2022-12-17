@@ -18,5 +18,6 @@ jobs:
       - run: pip install mkdocs-material-extensions
       - run: pip install mkdocs-autorefs
       - run: pip install mkdocstrings[python]
+      - run: pip install ipykernel
       - run: pip install -e ".[all]"
       - run: mkdocs gh-deploy --force
