@@ -89,8 +89,8 @@ nav:
           - "generators.utils.stepper": references/generators/utils/stepper.md
           - "generators.utils.noises": references/generators/utils/noises.md
           - "generators.utils.events": references/generators/utils/events.md
-        - "generators.var": references/data/generators/var.md
-        - "generators.spiking": references/data/generators/spiking.md
-        - "generators.brownian": references/data/generators/brownian.md
-        - "generators.elasticity": references/data/generators/elasticity.md
+        - "generators.var": references/generators/var.md
+        - "generators.spiking": references/generators/spiking.md
+        - "generators.brownian": references/generators/brownian.md
+        - "generators.elasticity": references/generators/elasticity.md
   - "Changelog": changelog.md
