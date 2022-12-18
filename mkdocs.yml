@@ -79,6 +79,7 @@ extra_javascript:
 nav:
   - "Home": index.md
   - "Tutorials":
+    - "Introduction": tutorials/index.md
     - "Generator Utilities": tutorials/generators_utils.py
     - "Generator Stepper": tutorials/generators_stepper.py
   - References:

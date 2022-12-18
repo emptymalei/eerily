@@ -11,7 +11,7 @@ class StepperModelParams:
     """Base Parameters for Stepper
 
     :param initial_state: the initial state, e.g., `np.array([1])`
-    :param variable_name: variable names
+    :param variable_name: variable names of the time series provided as a list.
     """
 
     initial_state: np.ndarray
