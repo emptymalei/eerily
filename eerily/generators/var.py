@@ -4,11 +4,11 @@ from typing import Iterator
 
 import numpy as np
 
-from eerily.generators.utils.stepper import BaseStepper, StepperModelParams
+from eerily.generators.utils.stepper import BaseStepper, StepperParams
 
 
 @dataclass(frozen=True)
-class ARModelParams(StepperModelParams):
+class ARModelParams(StepperParams):
     """Parameters of our AR model,
 
     $$s(t+1) = \phi_0 + \phi_1 s(t) + \epsilon.$$
@@ -44,7 +44,7 @@ class AR1Stepper(BaseStepper):
 
 
 @dataclass(frozen=True)
-class VAR1ModelParams(StepperModelParams):
+class VAR1ModelParams(StepperParams):
     r"""Parameters of our VAR model,
 
     $$

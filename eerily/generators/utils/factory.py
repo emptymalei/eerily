@@ -2,7 +2,10 @@ from typing import Iterator
 
 
 class Factory:
-    """An experimental factor that generates a history based on a stepper and the given length."""
+    """
+    An experimental factor that generates a history
+    based on a stepper and the given length.
+    """
 
     def __init__(self):
         pass
