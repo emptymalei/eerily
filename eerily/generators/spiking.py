@@ -2,11 +2,11 @@ import copy
 from dataclasses import dataclass
 from typing import Dict, Iterator
 
-from eerily.generators.utils.stepper import BaseStepper, StepperModelParams
+from eerily.generators.utils.stepper import BaseStepper, StepperParams
 
 
 @dataclass(frozen=True)
-class SpikingEventParams(StepperModelParams):
+class SpikingEventParams(StepperParams):
     """
     Parameters for spiking events.
 
