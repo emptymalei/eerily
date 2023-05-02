@@ -14,7 +14,14 @@ class LinearElasticityParams(StepperParams):
     Parameters for constant elasticity model.
 
     ```python
+    length = 10
 
+    lep = LinearElasticityParams(
+        initial_state={"log_demand": 3, "log_price": 0.5, "elasticity": None},
+        log_prices=iter(range(length)),
+        elasticity=iter([-3] * length),
+        variable_names=["log_demand", "log_price", "elasticity"],
+    )
     ```
 
     !!! warning "Initial Condition"
