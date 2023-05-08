@@ -82,6 +82,7 @@ nav:
     - "Introduction": tutorials/index.md
     - "Generator Utilities": tutorials/generators_utils.py
     - "Generator Stepper": tutorials/generators_stepper.py
+    - "Generator with Covariates": tutorials/generators_with_covariates.py
   - References:
     - "Introduction": references/index.md
     - "Data Generators":
