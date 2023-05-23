@@ -87,9 +87,12 @@ nav:
     - "Data Generators":
         - references/generators/index.md
         - "generators.utils":
+          - "generators.utils.base": references/generators/utils/base.md
           - "generators.utils.stepper": references/generators/utils/stepper.md
           - "generators.utils.noises": references/generators/utils/noises.md
           - "generators.utils.events": references/generators/utils/events.md
+          - "generators.utils.choices": references/generators/utils/choices.md
+          - "generators.utils.factory": references/generators/utils/factory.md
         - "generators.var": references/generators/var.md
         - "generators.spiking": references/generators/spiking.md
         - "generators.brownian": references/generators/brownian.md
