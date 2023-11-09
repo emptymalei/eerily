@@ -14,7 +14,14 @@ class LinearElasticityParams(StepperParams):
     Parameters for constant elasticity model.
 
     ```python
+    length = 10
 
+    lep = LinearElasticityParams(
+        initial_state={"log_demand": 3, "log_price": 0.5, "elasticity": None},
+        log_prices=iter(range(length)),
+        elasticity=iter([-3] * length),
+        variable_names=["log_demand", "log_price", "elasticity"],
+    )
     ```
 
     !!! warning "Initial Condition"
@@ -29,6 +36,7 @@ class LinearElasticityParams(StepperParams):
 
     elasticity: Iterator
     log_prices: Iterator
+    log_base_demand: Optional[Iterator] = None
 
     def __post_init__(self):
         if self.initial_state is None:
@@ -96,7 +104,12 @@ class ElasticityStepper(BaseStepper):
 
         next_log_price = next(self.model_params.log_prices)
 
-        next_log_demand = current_log_demand + elasticity * (next_log_price - current_log_price)
+        if self.model_params.log_base_demand is None:
+            next_log_demand = current_log_demand + elasticity * (next_log_price - current_log_price)
+        else:
+            next_log_base_demand = next(self.model_params.log_base_demand)
+            next_log_demand = next_log_base_demand + elasticity * next_log_price
+            self.current_state["log_base_demand"] = next_log_base_demand
 
         self.current_state["log_demand"] = next_log_demand
         self.current_state["log_price"] = next_log_price

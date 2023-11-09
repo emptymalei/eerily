@@ -28,6 +28,11 @@ def log_prices(length):
 
 
 @pytest.fixture
+def log_base_demand(length):
+    return iter(range(length))
+
+
+@pytest.fixture
 def deterministic_elasticity_stepper(constant_elasticity, log_prices):
 
     initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
@@ -36,6 +41,22 @@ def deterministic_elasticity_stepper(constant_elasticity, log_prices):
         initial_state=initial_condition,
         log_prices=log_prices,
         elasticity=constant_elasticity,
+        variable_names=["log_demand", "log_price", "elasticity"],
+    )
+
+    return ElasticityStepper(model_params=lep)
+
+
+@pytest.fixture
+def deterministic_base_demand_elasticity_stepper(constant_elasticity, log_prices, log_base_demand):
+
+    initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
+
+    lep = LinearElasticityParams(
+        initial_state=initial_condition,
+        log_prices=log_prices,
+        elasticity=constant_elasticity,
+        log_base_demand=log_base_demand,
         variable_names=["log_demand", "log_price", "elasticity"],
     )
 
@@ -59,6 +80,28 @@ def test_deterministic_elasticity_stepper(deterministic_elasticity_stepper, leng
         {"log_price": 7, "log_demand": -16.5, "elasticity": -3},
         {"log_price": 8, "log_demand": -19.5, "elasticity": -3},
         {"log_price": 9, "log_demand": -22.5, "elasticity": -3},
+    ]
+
+    assert container == container_truth
+
+
+def test_deterministic_base_demand_elasticity_stepper(deterministic_base_demand_elasticity_stepper, length):
+
+    container = []
+    for _ in range(length):
+        container.append(next(deterministic_base_demand_elasticity_stepper))
+
+    container_truth = [
+        {"log_demand": 0, "log_price": 0, "elasticity": -3, "log_base_demand": 0},
+        {"log_demand": -2, "log_price": 1, "elasticity": -3, "log_base_demand": 1},
+        {"log_demand": -4, "log_price": 2, "elasticity": -3, "log_base_demand": 2},
+        {"log_demand": -6, "log_price": 3, "elasticity": -3, "log_base_demand": 3},
+        {"log_demand": -8, "log_price": 4, "elasticity": -3, "log_base_demand": 4},
+        {"log_demand": -10, "log_price": 5, "elasticity": -3, "log_base_demand": 5},
+        {"log_demand": -12, "log_price": 6, "elasticity": -3, "log_base_demand": 6},
+        {"log_demand": -14, "log_price": 7, "elasticity": -3, "log_base_demand": 7},
+        {"log_demand": -16, "log_price": 8, "elasticity": -3, "log_base_demand": 8},
+        {"log_demand": -18, "log_price": 9, "elasticity": -3, "log_base_demand": 9},
     ]
 
     assert container == container_truth

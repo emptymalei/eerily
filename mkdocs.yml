@@ -82,14 +82,18 @@ nav:
     - "Introduction": tutorials/index.md
     - "Generator Utilities": tutorials/generators_utils.py
     - "Generator Stepper": tutorials/generators_stepper.py
+    - "Generator with Covariates": tutorials/generators_with_covariates.py
   - References:
     - "Introduction": references/index.md
     - "Data Generators":
         - references/generators/index.md
         - "generators.utils":
+          - "generators.utils.base": references/generators/utils/base.md
           - "generators.utils.stepper": references/generators/utils/stepper.md
           - "generators.utils.noises": references/generators/utils/noises.md
           - "generators.utils.events": references/generators/utils/events.md
+          - "generators.utils.choices": references/generators/utils/choices.md
+          - "generators.utils.factory": references/generators/utils/factory.md
         - "generators.var": references/generators/var.md
         - "generators.spiking": references/generators/spiking.md
         - "generators.brownian": references/generators/brownian.md
