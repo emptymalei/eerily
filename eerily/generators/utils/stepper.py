@@ -1,21 +1,19 @@
 import copy
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List
-
-import numpy as np
+from typing import Any, List, Optional
 
 
 @dataclass(frozen=True)
-class StepperModelParams:
+class StepperParams:
     """Base Parameters for Stepper
 
     :param initial_state: the initial state, e.g., `np.array([1])`
     :param variable_name: variable names of the time series provided as a list.
     """
 
-    initial_state: np.ndarray
-    variable_names: List[str]
+    initial_state: Any
+    variable_names: List[Any]
 
 
 class BaseStepper(ABC):

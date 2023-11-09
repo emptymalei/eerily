@@ -1,9 +1,48 @@
 import copy
+from dataclasses import dataclass
 from typing import Dict, Iterator, Optional, Sequence, Union
 
+import pandas as pd
 from loguru import logger
 
-from eerily.generators.utils.stepper import BaseStepper
+from eerily.generators.utils.stepper import BaseStepper, StepperParams
+
+
+@dataclass(frozen=True)
+class LinearElasticityParams(StepperParams):
+    """
+    Parameters for constant elasticity model.
+
+    ```python
+    length = 10
+
+    lep = LinearElasticityParams(
+        initial_state={"log_demand": 3, "log_price": 0.5, "elasticity": None},
+        log_prices=iter(range(length)),
+        elasticity=iter([-3] * length),
+        variable_names=["log_demand", "log_price", "elasticity"],
+    )
+    ```
+
+    !!! warning "Initial Condition"
+        Initial condition is a dictionary with at least two keys `sale` and `price`.
+
+        Note that the initial condition is NOT returned in the iterator.
+
+
+    :param elasticity: an iterator that generates the elasticity to be used for each step
+    :param log_prices: an iterator that generates the log prices in each step
+    """
+
+    elasticity: Iterator
+    log_prices: Iterator
+    log_base_demand: Optional[Iterator] = None
+
+    def __post_init__(self):
+        if self.initial_state is None:
+            self.initial_state = {"log_demand": 1, "log_price": 10, "elasticity": None}
+        if self.variable_names is None:
+            self.variable_names = ["log_demand", "log_price", "elasticity"]
 
 
 class ElasticityStepper(BaseStepper):
@@ -24,80 +63,59 @@ class ElasticityStepper(BaseStepper):
     For example, with initial condition
 
     ```
-    initial_condition = {"price": 0, "sales": 10}
+    initial_condition = {"log_price": 1, "log_sales": 10, "elasticity": None}
     ```
 
     For a deterministic model, we have
 
     ```python
     length = 10
-    elasticity = [-3] * length
-    prices = range(length)
-    initial_condition = {"price: 0.5, "sale": 3}
+    elasticity = iter([-3] * length)
+    log_prices = iter(range(length))
 
-    es = ElasticityStepper(
-        initial_condition=initial_condition,
+    initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
+
+    lep = LinearElasticityParams(
+        initial_state=initial_condition,
+        log_prices=log_prices,
         elasticity=elasticity,
-        prices=prices
+        variable_names=["log_demand", "log_price", "elasticity"],
     )
+
+    es = ElasticityStepper(model_params=lep)
 
     next(es)
     ```
 
-    !!! warning "Initial Condition"
-        Initial condition is a dictionary with at least two keys `sale` and `price`.
+    We have utils in [`eerily.generators.utils`][eerily.generators.utils]
+    to help the user creating elasticty and log prices generators.
+    For example, we can create a constant iterator using
+    [`ConstantIterator`][eerily.generators.utils.base.ConstantIterator]
 
-        Note that the initial condition is NOT returned in the iterator.
 
     """
 
-    def __init__(
-        self,
-        initial_condition: Dict[str, float],
-        elasticity: Union[Iterator, Sequence],
-        prices: Union[Iterator, Sequence],
-        length: Optional[int] = None,
-    ):
-        self.initial_condition = copy.deepcopy(initial_condition)
-        self.current_state = copy.deepcopy(initial_condition)
-        self.elasticity = elasticity
-        self.prices = prices
-
-        self.length = length
-
-        if not isinstance(self.prices, Iterator):
-            self.length = len(self.prices)
-            self.prices = iter(self.prices)
-
-        if not isinstance(self.elasticity, Iterator):
-            elasticity_length = len(self.elasticity)
-            self.elasticity = iter(self.elasticity)
-            if (self.length is not None) and (elasticity_length != self.length):
-                logger.warning(
-                    f"elasticity length {elasticity_length} is different "
-                    f"from prices length {self.length}; "
-                    "Setting length to the min of the two."
-                )
-            self.length = min(self.length, elasticity_length)
-
-    def __iter__(self):
-        return self
-
     def __next__(self):
 
-        price = next(self.prices)
-        elasticity = next(self.elasticity)
-        sale = self.current_state["sale"] + elasticity * (price - self.current_state["price"])
+        elasticity = next(self.model_params.elasticity)
 
-        self.current_state["sale"] = sale
-        self.current_state["price"] = price
+        current_log_price = self.current_state["log_price"]
+        current_log_demand = self.current_state["log_demand"]
+
+        next_log_price = next(self.model_params.log_prices)
+
+        if self.model_params.log_base_demand is None:
+            next_log_demand = current_log_demand + elasticity * (next_log_price - current_log_price)
+        else:
+            next_log_base_demand = next(self.model_params.log_base_demand)
+            next_log_demand = next_log_base_demand + elasticity * next_log_price
+            self.current_state["log_base_demand"] = next_log_base_demand
+
+        self.current_state["log_demand"] = next_log_demand
+        self.current_state["log_price"] = next_log_price
         self.current_state["elasticity"] = elasticity
 
         return copy.deepcopy(self.current_state)
 
     def __repr__(self) -> str:
-        return (
-            "ElasticityStepper: \n"
-            f"initial_condition: {self.initial_condition}\n"
-            f"current_state: {self.current_state}"
-        )
+        return "ElasticityStepper: \n" f"parameters: {self.model_params}\n" f"current_state: {self.current_state}"
