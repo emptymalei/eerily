@@ -34,7 +34,7 @@ class AR1Stepper(BaseStepper):
     :param model_params: parameters for the AR model
     """
 
-    def __next__(self):
+    def compute_step(self):
         epsilon = next(self.model_params.epsilon)
 
         next_s = self.model_params.phi0 + self.model_params.phi1 * self.current_state + epsilon
@@ -77,7 +77,7 @@ class VAR1Stepper(BaseStepper):
         [`VAR1ModelParams`][eerily.generators.var.VAR1ModelParams]
     """
 
-    def __next__(self):
+    def compute_step(self):
 
         epsilon = next(self.model_params.epsilon)
         phi0 = self.model_params.phi0
