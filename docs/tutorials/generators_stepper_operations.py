@@ -67,4 +67,4 @@ ax.set_ylabel("Potential")
 ax.set_title("Spiking Example")
 
 # %% [markdown]
-# We can observe the potential is higher after step 70. This is because we have a higher spiking rate in the second stepper.
+# We can observe that the potential is higher after step 70. This is because we have a higher spiking rate in the second stepper.
