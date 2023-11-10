@@ -34,7 +34,6 @@ class ConstantStepper(BaseStepper):
     """
 
     def compute_step(self):
-
         return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
 
     def __repr__(self) -> str:

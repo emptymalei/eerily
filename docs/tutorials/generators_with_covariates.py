@@ -64,6 +64,8 @@ cs = ConstantStepper(model_params=csp, length=length)
 # We can combine the two steppers using `&`.
 
 # %%
-generator = es_1 & ss
+generator = es_1 & ss & cs
 
 list(generator)
+
+# %%
