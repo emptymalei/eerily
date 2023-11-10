@@ -30,7 +30,7 @@ def test_base_stepper_with_length(length):
         pass
 
     class DummyStepper(BaseStepper):
-        def __next__(self):
+        def compute_step(self):
             return 1
 
     stepper_params = DummyStepperParams(initial_state=1, variable_names=["y"])
@@ -45,7 +45,6 @@ def test_base_stepper_add():
 
     class DummyStepper(BaseStepper):
         def compute_step(self):
-            self._counter += 1
             return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
 
     stepper_params_1 = DummyStepperParams(initial_state=[1], variable_names=["y1"])
@@ -64,8 +63,7 @@ def test_base_stepper_add_3():
         pass
 
     class DummyStepper(BaseStepper):
-        def __next__(self):
-            self._counter += 1
+        def compute_step(self):
             return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
 
     stepper_params_1 = DummyStepperParams(initial_state=[1], variable_names=["y"])
@@ -87,8 +85,7 @@ def test_base_stepper_and():
         pass
 
     class DummyStepper(BaseStepper):
-        def __next__(self):
-            self._counter += 1
+        def compute_step(self):
             return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
 
     stepper_params_1 = DummyStepperParams(initial_state=[1], variable_names=["y1"])
@@ -107,8 +104,7 @@ def test_base_stepper_and_3():
         pass
 
     class DummyStepper(BaseStepper):
-        def __next__(self):
-            self._counter += 1
+        def compute_step(self):
             return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
 
     stepper_params_1 = DummyStepperParams(initial_state=[1], variable_names=["y1"])

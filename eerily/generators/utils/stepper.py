@@ -1,10 +1,25 @@
+from __future__ import annotations
+
 import copy
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from itertools import chain
-from typing import Any, Iterator, List, Optional
+from typing import Any, List, Optional, Union
 
 from loguru import logger
+
+
+class StepperOperator:
+    """Allowing `&` and `+` for the steppers."""
+
+    def __add__(
+        self, another_stepper: Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+    ) -> SequentialStepper:
+        return SequentialStepper([self, another_stepper])
+
+    def __and__(
+        self, another_stepper: Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+    ) -> MergedStepper:
+        return MergedStepper([self, another_stepper])
 
 
 @dataclass(frozen=True)
@@ -19,7 +34,7 @@ class StepperParams:
     variable_names: List[Any]
 
 
-class BaseStepper(ABC):
+class BaseStepper(ABC, StepperOperator):
     """A framework to evolve a DGP to the next step"""
 
     def __init__(self, model_params: StepperParams, length: Optional[int] = None) -> None:
@@ -56,21 +71,14 @@ class BaseStepper(ABC):
     def compute_step(self):
         pass
 
-    def __add__(self, another_stepper) -> Iterator:
-        return SequentialStepper([self, another_stepper])
 
-    def __and__(self, another_stepper) -> Iterator:
-        return MergedStepper([self, another_stepper])
-
-
-class SequentialStepper(BaseStepper):
+class SequentialStepper(StepperOperator):
     def __init__(
         self,
-        iterators: List[BaseStepper],
+        iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]],
     ):
         self.iterators: List[BaseStepper] = []
         self._length = 0
-        self._counter = 0
         for stepper in iterators:
             if isinstance(stepper, SequentialStepper):
                 self.iterators.extend(stepper.iterators)
@@ -79,13 +87,10 @@ class SequentialStepper(BaseStepper):
             else:
                 raise TypeError("Please provide a list of steppers")
 
-    def compute_step(self):
+    def __iter__(self):
         for stepper in self.iterators:
             for _ in range(stepper.length):
                 yield next(stepper)
-
-    def __next__(self):
-        yield from self.compute_step()
 
     @property
     def length(self):
@@ -96,10 +101,10 @@ class SequentialStepper(BaseStepper):
         return self.length
 
 
-class MergedStepper(BaseStepper):
+class MergedStepper(StepperOperator):
     def __init__(
         self,
-        iterators: List[BaseStepper],
+        iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]],
     ):
         self.iterators: List[BaseStepper] = []
         self._length = 0
@@ -112,23 +117,23 @@ class MergedStepper(BaseStepper):
             else:
                 raise TypeError("Please provide a list of steppers")
 
-    def compute_step(self):
+    def __iter__(self):
         if all([stepper.length is not None for stepper in self.iterators]):
             length = min([stepper.length for stepper in self.iterators])
         else:
             raise ValueError("length is not set")
 
-        for _, vals in zip(range(length), self.iterators):
+        for vals in zip(range(length), *self.iterators):
+            idx = vals[0]
+            iter_values = vals[1:]
             combined = {}
-            for val in vals:
+            for val in iter_values:
                 if isinstance(val, dict):
                     combined.update(val)
                 else:
                     raise NotImplementedError("Please implement __and__ for your steppers")
             yield combined
-
-    def __next__(self):
-        yield from self.compute_step()
+            self._counter += idx
 
     @property
     def length(self):
