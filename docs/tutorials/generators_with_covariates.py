@@ -18,6 +18,9 @@ from eerily.generators.naive import (
     SequenceStepperParams,
 )
 
+# %% [markdown]
+# ## Elasticity Stepper
+
 # %%
 length = 10
 elasticity = iter([-3] * length)
@@ -32,7 +35,7 @@ lep = LinearElasticityParams(
     variable_names=["log_demand", "log_price", "elasticity"],
 )
 
-es = ElasticityStepper(model_params=lep)
+es = ElasticityStepper(model_params=lep, length=length)
 
 next(es)
 
@@ -60,7 +63,7 @@ ss = SequenceStepper(model_params=ssp, length=length)
 csp = ConstStepperParams(initial_state=["brand_1"], variable_names=["name"])
 cs = ConstantStepper(model_params=csp, length=length)
 
-# %%
+# %% [markdown]
 # We can combine the two steppers using `&`.
 
 # %%
