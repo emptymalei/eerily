@@ -1,6 +1,6 @@
 import math
 
-from ts_bolt.physics.pendulum import Pendulum
+from eerily.physics.pendulum import Pendulum
 
 
 def test_pendulum_generate_data():  # type: ignore
