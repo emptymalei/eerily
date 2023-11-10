@@ -63,14 +63,14 @@ class BrownianMotionStepper(BaseStepper):
         e.g., [`BrownianMotionParams`][eerily.generators.brownian.BrownianMotionParams]
     """
 
-    def __next__(self) -> Dict[str, float]:
+    def compute_step(self) -> Dict[str, float]:
 
-        force_density = next(self.model_params.force_densities)
+        force_density = next(self.model_params.force_densities)  # type: ignore
 
         v_next = (
             self.current_state
-            + force_density * self.model_params.delta_t
-            - self.model_params.gamma * self.current_state * self.model_params.delta_t
+            + force_density * self.model_params.delta_t  # type: ignore
+            - self.model_params.gamma * self.current_state * self.model_params.delta_t  # type: ignore
         )
 
         self.current_state = v_next

@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, Literal, Optional
 
 
 class Factory:
@@ -7,8 +7,8 @@ class Factory:
     based on a stepper and the given length.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, format: Optional[Literal["list", "dataframe"]] = None):
+        self.format = format
 
     def __call__(self, stepper: Iterator, length: int):
         i = 0

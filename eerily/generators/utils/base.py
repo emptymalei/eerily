@@ -5,8 +5,7 @@ class ConstantIterator:
     """An iterator that emits constant values.
 
     ```python
-    rate = 0.1
-    pe = PoissonEvents(rate=rate)
+    pe = ConstantIterator(constant=1)
     next(pe)
     ```
 
@@ -15,6 +14,9 @@ class ConstantIterator:
 
     def __init__(self, constant: Any):
         self.constant = constant
+
+    def __iter__(self):
+        return self
 
     def __next__(self) -> Any:
         return self.constant

@@ -95,7 +95,7 @@ class ElasticityStepper(BaseStepper):
 
     """
 
-    def __next__(self):
+    def compute_step(self):
 
         elasticity = next(self.model_params.elasticity)
 
