@@ -37,7 +37,7 @@ class SpikingEventStepper(BaseStepper):
         e.g., [`SpikingEventParams`][eerily.generators.spiking.SpikingEventParams]
     """
 
-    def __next__(self) -> Dict[str, float]:
+    def compute_step(self) -> Dict[str, float]:
 
         background = next(self.model_params.background)
         spike = next(self.model_params.spike)

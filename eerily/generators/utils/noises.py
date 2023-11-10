@@ -16,6 +16,9 @@ class GaussianNoise:
         self.std = std
         self.rng = np.random.default_rng(seed=seed)
 
+    def __iter__(self):
+        return self
+
     def __next__(self) -> float:
         return self.rng.normal(self.mu, self.std)
 
@@ -32,6 +35,9 @@ class LogNormalNoise:
         self.mu = mu
         self.std = std
         self.rng = np.random.default_rng(seed=seed)
+
+    def __iter__(self):
+        return self
 
     def __next__(self) -> float:
         return self.rng.lognormal(self.mu, self.std)

@@ -22,6 +22,9 @@ class PoissonEvent:
         self.rate = rate
         self.rng = np.random.default_rng(seed=seed)
 
+    def __iter__(self):
+        return self
+
     def __next__(self) -> float:
         random_state = self.rng.random() <= self.rate
         return int(random_state)
