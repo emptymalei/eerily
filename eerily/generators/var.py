@@ -78,7 +78,6 @@ class VAR1Stepper(BaseStepper):
     """
 
     def compute_step(self):
-
         epsilon = next(self.model_params.epsilon)
         phi0 = self.model_params.phi0
         phi1 = self.model_params.phi1

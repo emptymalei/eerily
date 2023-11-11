@@ -30,8 +30,9 @@ from eerily.generators.utils.noises import LogNormalNoise
         )
     ],
 )
-def test_spiking_event_stepper(spike_rate, spike_level_mu, spike_level_std, background_mu, background_std, expected):
-
+def test_spiking_event_stepper(
+    spike_rate, spike_level_mu, spike_level_std, background_mu, background_std, expected
+):
     seed = 42
 
     spike = PoissonEvent(rate=spike_rate, seed=seed)

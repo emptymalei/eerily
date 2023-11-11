@@ -14,7 +14,6 @@ from eerily.generators.utils.base import ConstantIterator
     ],
 )
 def test_constant_iterator(constant, expected_val):
-
     length = 10
 
     constant_iterator = ConstantIterator(constant=constant)

@@ -34,7 +34,6 @@ def log_base_demand(length):
 
 @pytest.fixture
 def deterministic_elasticity_stepper(constant_elasticity, log_prices):
-
     initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
 
     lep = LinearElasticityParams(
@@ -49,7 +48,6 @@ def deterministic_elasticity_stepper(constant_elasticity, log_prices):
 
 @pytest.fixture
 def deterministic_base_demand_elasticity_stepper(constant_elasticity, log_prices, log_base_demand):
-
     initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
 
     lep = LinearElasticityParams(
@@ -64,7 +62,6 @@ def deterministic_base_demand_elasticity_stepper(constant_elasticity, log_prices
 
 
 def test_deterministic_elasticity_stepper(deterministic_elasticity_stepper, length):
-
     container = []
     for _ in range(length):
         container.append(next(deterministic_elasticity_stepper))
@@ -86,7 +83,6 @@ def test_deterministic_elasticity_stepper(deterministic_elasticity_stepper, leng
 
 
 def test_deterministic_base_demand_elasticity_stepper(deterministic_base_demand_elasticity_stepper, length):
-
     container = []
     for _ in range(length):
         container.append(next(deterministic_base_demand_elasticity_stepper))
@@ -116,7 +112,6 @@ def gaussian_elasticity(seed):
 
 @pytest.fixture
 def stochastic_elasticity_stepper(gaussian_elasticity, log_prices):
-
     initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
 
     lep = LinearElasticityParams(
@@ -130,7 +125,6 @@ def stochastic_elasticity_stepper(gaussian_elasticity, log_prices):
 
 
 def test_stochastic_elasticity_stepper(stochastic_elasticity_stepper, length):
-
     container = []
     for _ in range(length):
         container.append(next(stochastic_elasticity_stepper))

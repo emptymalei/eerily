@@ -16,7 +16,6 @@ class SinTimeSeriesDataset(Dataset):
         self._gen_data()
 
     def _gen_data(self):
-
         series = []
         for i in range(self.nodes):
             series.append(torch.sin(torch.linspace(i, self.sequence_length + i, self.sequence_length + 1)))
@@ -40,7 +39,6 @@ class SinTimeSeriesDataset(Dataset):
 
 
 if __name__ == "__main__":
-
     d = SinTimeSeriesDataset(100, 5, 1, 3)
 
     print(d.data.shape)

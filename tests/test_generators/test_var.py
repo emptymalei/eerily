@@ -28,7 +28,6 @@ def var_epsilon():
 
 @pytest.fixture
 def var_params(var_epsilon):
-
     model_params = VAR1ModelParams(
         delta_t=0.01,
         phi0=np.array([0.1, 0.1]),
@@ -47,7 +46,6 @@ def var_stepper(var_params):
 
 
 def test_var_stepper(var_stepper, length):
-
     container = []
     for _ in range(length):
         container.append(next(var_stepper).tolist())
@@ -91,7 +89,6 @@ def ar_epsilon():
 
 @pytest.fixture
 def ar_params(ar_epsilon):
-
     model_params = ARModelParams(
         delta_t=0.1,
         phi0=0,
@@ -110,7 +107,6 @@ def ar_stepper(ar_params):
 
 
 def test_ar_stepper(ar_stepper, length):
-
     container = np.array([])
     for _ in range(length):
         container = np.append(container, next(ar_stepper))

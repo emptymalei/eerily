@@ -96,7 +96,6 @@ class ElasticityStepper(BaseStepper):
     """
 
     def compute_step(self):
-
         elasticity = next(self.model_params.elasticity)
 
         current_log_price = self.current_state["log_price"]
@@ -118,4 +117,8 @@ class ElasticityStepper(BaseStepper):
         return copy.deepcopy(self.current_state)
 
     def __repr__(self) -> str:
-        return "ElasticityStepper: \n" f"parameters: {self.model_params}\n" f"current_state: {self.current_state}"
+        return (
+            "ElasticityStepper: \n"
+            f"parameters: {self.model_params}\n"
+            f"current_state: {self.current_state}"
+        )

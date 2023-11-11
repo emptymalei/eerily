@@ -13,7 +13,6 @@ def gaussian_force(seed):
 
 @pytest.fixture
 def brownian_motion_params(gaussian_force):
-
     model_params = BrownianMotionParams(
         gamma=0,
         delta_t=0.1,
@@ -31,7 +30,6 @@ def brownian_motion_stepper(brownian_motion_params):
 
 
 def test_brownian_motion_stepper(brownian_motion_stepper, length):
-
     container = np.array([])
     for _ in range(length):
         container = np.append(container, next(brownian_motion_stepper))

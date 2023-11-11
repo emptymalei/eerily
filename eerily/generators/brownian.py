@@ -64,7 +64,6 @@ class BrownianMotionStepper(BaseStepper):
     """
 
     def compute_step(self) -> Dict[str, float]:
-
         force_density = next(self.model_params.force_densities)  # type: ignore
 
         v_next = (
