@@ -3,6 +3,12 @@
 
 # %% [markdown]
 # Steppers can be combined into one single generator. In this example, we reuse the concepts in the tutorial "Using Data Generator Stepper".
+#
+# In eerily, we support two operators: `&` and `+`. The `&` operator is used to merge two steppers, while the `+` operator is used to concatenate two steppers.
+#
+# Note that we need to use brackets to indicate that the merge has higher precedence,. i.e.
+#
+# `(stepper_1 & stepper_2) + stepper_3` instead of `stepper_1 & stepper_2 + stepper_3`.
 
 
 # %%
