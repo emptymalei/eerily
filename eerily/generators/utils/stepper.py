@@ -77,12 +77,14 @@ class SequentialStepper(StepperOperator):
         self,
         iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]],
     ):
-        self.iterators: List[BaseStepper] = []
+        self.iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]] = []
         self._length = 0
         for stepper in iterators:
             if isinstance(stepper, SequentialStepper):
                 self.iterators.extend(stepper.iterators)
             elif isinstance(stepper, BaseStepper):
+                self.iterators.append(stepper)
+            elif isinstance(stepper, MergedStepper):
                 self.iterators.append(stepper)
             else:
                 raise TypeError("Please provide a list of steppers")
@@ -90,7 +92,7 @@ class SequentialStepper(StepperOperator):
     def __iter__(self):
         for stepper in self.iterators:
             for _ in range(stepper.length):
-                yield next(stepper)
+                yield from stepper
 
     @property
     def length(self):
@@ -106,13 +108,15 @@ class MergedStepper(StepperOperator):
         self,
         iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]],
     ):
-        self.iterators: List[BaseStepper] = []
+        self.iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]] = []
         self._length = 0
         self._counter = 0
         for stepper in iterators:
             if isinstance(stepper, MergedStepper):
                 self.iterators.extend(stepper.iterators)
             elif isinstance(stepper, BaseStepper):
+                self.iterators.append(stepper)
+            elif isinstance(stepper, SequentialStepper):
                 self.iterators.append(stepper)
             else:
                 raise TypeError("Please provide a list of steppers")
@@ -133,7 +137,7 @@ class MergedStepper(StepperOperator):
                 else:
                     raise NotImplementedError("Please implement __and__ for your steppers")
             yield combined
-            self._counter += idx
+            self._counter = idx
 
     @property
     def length(self):
