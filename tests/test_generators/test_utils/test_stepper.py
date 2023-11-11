@@ -9,7 +9,9 @@ class DummyStepperParams(StepperParams):
 
 class DummyStepper(BaseStepper):
     def compute_step(self):
-        return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
+        return dict(
+            zip(self.model_params.variable_names, self.model_params.initial_state)
+        )
 
 
 def test_base_stepper():
@@ -93,7 +95,9 @@ def test_base_stepper_and_add():
     stepper_params_2 = DummyStepperParams(initial_state=[2], variable_names=["y2"])
     stepper_2 = DummyStepper(model_params=stepper_params_2, length=4)
 
-    stepper_params_3 = DummyStepperParams(initial_state=[3, 4], variable_names=["y3", "y4"])
+    stepper_params_3 = DummyStepperParams(
+        initial_state=[3, 4], variable_names=["y3", "y4"]
+    )
     stepper_3 = DummyStepper(model_params=stepper_params_3, length=2)
 
     generator = (stepper_1 & stepper_2) + stepper_3

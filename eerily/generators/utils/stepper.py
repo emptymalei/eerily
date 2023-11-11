@@ -12,12 +12,18 @@ class StepperOperator:
     """Allowing `&` and `+` for the steppers."""
 
     def __add__(
-        self, another_stepper: Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+        self,
+        another_stepper: Union[
+            StepperOperator, BaseStepper, SequentialStepper, MergedStepper
+        ],
     ) -> SequentialStepper:
         return SequentialStepper([self, another_stepper])
 
     def __and__(
-        self, another_stepper: Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+        self,
+        another_stepper: Union[
+            StepperOperator, BaseStepper, SequentialStepper, MergedStepper
+        ],
     ) -> MergedStepper:
         return MergedStepper([self, another_stepper])
 
@@ -37,7 +43,9 @@ class StepperParams:
 class BaseStepper(ABC, StepperOperator):
     """A framework to evolve a DGP to the next step"""
 
-    def __init__(self, model_params: StepperParams, length: Optional[int] = None) -> None:
+    def __init__(
+        self, model_params: StepperParams, length: Optional[int] = None
+    ) -> None:
         self.model_params = model_params
         self.current_state = copy.deepcopy(self.model_params.initial_state)
         self.length = length
@@ -75,9 +83,13 @@ class BaseStepper(ABC, StepperOperator):
 class SequentialStepper(StepperOperator):
     def __init__(
         self,
-        iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]],
+        iterators: List[
+            Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+        ],
     ):
-        self.iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]] = []
+        self.iterators: List[
+            Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+        ] = []
         self._length = 0
         for stepper in iterators:
             if isinstance(stepper, SequentialStepper):
@@ -106,9 +118,13 @@ class SequentialStepper(StepperOperator):
 class MergedStepper(StepperOperator):
     def __init__(
         self,
-        iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]],
+        iterators: List[
+            Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+        ],
     ):
-        self.iterators: List[Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]] = []
+        self.iterators: List[
+            Union[StepperOperator, BaseStepper, SequentialStepper, MergedStepper]
+        ] = []
         self._length = 0
         self._counter = 0
         for stepper in iterators:
@@ -135,7 +151,9 @@ class MergedStepper(StepperOperator):
                 if isinstance(val, dict):
                     combined.update(val)
                 else:
-                    raise NotImplementedError("Please implement __and__ for your steppers")
+                    raise NotImplementedError(
+                        "Please implement __and__ for your steppers"
+                    )
             yield combined
             self._counter = idx
 

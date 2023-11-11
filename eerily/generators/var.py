@@ -37,7 +37,11 @@ class AR1Stepper(BaseStepper):
     def compute_step(self):
         epsilon = next(self.model_params.epsilon)
 
-        next_s = self.model_params.phi0 + self.model_params.phi1 * self.current_state + epsilon
+        next_s = (
+            self.model_params.phi0
+            + self.model_params.phi1 * self.current_state
+            + epsilon
+        )
         self.current_state = next_s
 
         return copy.deepcopy(self.current_state)

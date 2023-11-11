@@ -34,11 +34,15 @@ class ConstantStepper(BaseStepper):
     """
 
     def compute_step(self):
-        return dict(zip(self.model_params.variable_names, self.model_params.initial_state))
+        return dict(
+            zip(self.model_params.variable_names, self.model_params.initial_state)
+        )
 
     def __repr__(self) -> str:
         return (
-            "ConstantStepper: \n" f"parameters: {self.model_params}\n" f"current_state: {self.current_state}"
+            "ConstantStepper: \n"
+            f"parameters: {self.model_params}\n"
+            f"current_state: {self.current_state}"
         )
 
 
@@ -86,5 +90,7 @@ class SequenceStepper(BaseStepper):
 
     def __repr__(self) -> str:
         return (
-            "SequenceStepper: \n" f"parameters: {self.model_params}\n" f"current_state: {self.current_state}"
+            "SequenceStepper: \n"
+            f"parameters: {self.model_params}\n"
+            f"current_state: {self.current_state}"
         )

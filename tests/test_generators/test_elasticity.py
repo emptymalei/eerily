@@ -47,7 +47,9 @@ def deterministic_elasticity_stepper(constant_elasticity, log_prices):
 
 
 @pytest.fixture
-def deterministic_base_demand_elasticity_stepper(constant_elasticity, log_prices, log_base_demand):
+def deterministic_base_demand_elasticity_stepper(
+    constant_elasticity, log_prices, log_base_demand
+):
     initial_condition = {"log_demand": 3, "log_price": 0.5, "elasticity": None}
 
     lep = LinearElasticityParams(
@@ -82,7 +84,9 @@ def test_deterministic_elasticity_stepper(deterministic_elasticity_stepper, leng
     assert container == container_truth
 
 
-def test_deterministic_base_demand_elasticity_stepper(deterministic_base_demand_elasticity_stepper, length):
+def test_deterministic_base_demand_elasticity_stepper(
+    deterministic_base_demand_elasticity_stepper, length
+):
     container = []
     for _ in range(length):
         container.append(next(deterministic_base_demand_elasticity_stepper))
@@ -182,4 +186,6 @@ def test_stochastic_elasticity_stepper(stochastic_elasticity_stepper, length):
         },
     ]
 
-    pd.testing.assert_frame_equal(pd.DataFrame(container), pd.DataFrame(container_truth), check_like=True)
+    pd.testing.assert_frame_equal(
+        pd.DataFrame(container), pd.DataFrame(container_truth), check_like=True
+    )

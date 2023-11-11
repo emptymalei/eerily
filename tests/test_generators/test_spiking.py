@@ -7,7 +7,12 @@ from eerily.generators.utils.noises import LogNormalNoise
 
 
 @pytest.mark.parametrize(
-    ("spike_rate," "spike_level_mu,spike_level_std," "background_mu,background_std," "expected"),
+    (
+        "spike_rate,"
+        "spike_level_mu,spike_level_std,"
+        "background_mu,background_std,"
+        "expected"
+    ),
     [
         (
             0.5,

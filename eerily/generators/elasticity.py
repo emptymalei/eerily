@@ -104,7 +104,9 @@ class ElasticityStepper(BaseStepper):
         next_log_price = next(self.model_params.log_prices)
 
         if self.model_params.log_base_demand is None:
-            next_log_demand = current_log_demand + elasticity * (next_log_price - current_log_price)
+            next_log_demand = current_log_demand + elasticity * (
+                next_log_price - current_log_price
+            )
         else:
             next_log_base_demand = next(self.model_params.log_base_demand)
             next_log_demand = next_log_base_demand + elasticity * next_log_price
